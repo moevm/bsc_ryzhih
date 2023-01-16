@@ -2,14 +2,11 @@ import os
 
 TOKEN = os.environ.get('TOKEN')
 TEST_TOKEN = os.environ.get('TEST_TOKEN')
-#print(TOKEN)
-#TOKEN = 'MTA1MDU2Mzk5NzM2OTM3MjcyMw.GKm0iX.MOQODsBS5I0N5cIzwnAFSqF8Tilx8i7TkSKP_8'
 
 import discord
 from discord import app_commands
 from discord_manager import DiscordManager
 from github import Github
-#import requests
 
 intents = discord.Intents.all()
 intents.message_content = True
