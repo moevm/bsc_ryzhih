@@ -1,8 +1,15 @@
-TOKEN = 'MTA1MDU2Mzk5NzM2OTM3MjcyMw.GN4jU8.9fZAnhUvmbYH2C-l426m8BlD-uNglbHoP62B3M'
+import os
+
+TOKEN = os.environ.get('TOKEN')
+TEST_TOKEN = os.environ.get('TEST_TOKEN')
+#print(TOKEN)
+#TOKEN = 'MTA1MDU2Mzk5NzM2OTM3MjcyMw.GKm0iX.MOQODsBS5I0N5cIzwnAFSqF8Tilx8i7TkSKP_8'
 
 import discord
 from discord import app_commands
 from discord_manager import DiscordManager
+from github import Github
+#import requests
 
 intents = discord.Intents.all()
 intents.message_content = True
@@ -32,10 +39,33 @@ class DiscordBot(discord.Client):
         guild = self.get_guild(1031609704188739614)
         await member.add_roles(discord.utils.get(guild.roles, name='2022'))
 
+    async def generate_message():
+        g = Github(TEST_TOKEN)
+        #repo = g.get_user().get_repo('industrial_practice2022')
+        #print(repo)
+        #for repo in g.get_user().get_repos():
+        #    print(repo.name)
+        #    print(repo.git_url)
+        #    pulls = repo.get_pulls(state='open', sort='created', base='master')
+        #    for pr in pulls:
+        #        print(pr)
+        g = Github(TEST_TOKEN)
+        repo = g.get_user().get_repo("HELVETE")
+        pulls = repo.get_pulls(state='open', sort='created', base='master')
+        for pr in pulls:
+            print(pr.user)
+        #print(repo.name)
+        #print(repo.name)
+        #pulls = repo.get_pulls(state='open', sort='created', base='master')
+        #for pr in pulls:
+        #    print(pr)
+        #git_url = 'https://api.github.com/users/Ryzhikh-Roman/repos'
+        #request = requests.get(git_url)
+        #print(request.content)
+
+
 
 client = DiscordBot()
 tree = app_commands.CommandTree(client)
 
-import slash_commands
-
-
+from slash_commands import *
