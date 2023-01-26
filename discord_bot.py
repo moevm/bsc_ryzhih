@@ -1,4 +1,5 @@
 import os
+import json
 
 TOKEN = os.environ.get('TOKEN')
 TEST_TOKEN = os.environ.get('TEST_TOKEN')
@@ -36,29 +37,19 @@ class DiscordBot(discord.Client):
         guild = self.get_guild(1031609704188739614)
         await member.add_roles(discord.utils.get(guild.roles, name='2022'))
 
-    async def generate_message():
-        g = Github(TEST_TOKEN)
-        #repo = g.get_user().get_repo('industrial_practice2022')
-        #print(repo)
-        #for repo in g.get_user().get_repos():
-        #    print(repo.name)
-        #    print(repo.git_url)
-        #    pulls = repo.get_pulls(state='open', sort='created', base='master')
-        #    for pr in pulls:
-        #        print(pr)
+    async def generate_message(message_type):
         g = Github(TEST_TOKEN)
         repo = g.get_user().get_repo("HELVETE")
         pulls = repo.get_pulls(state='open', sort='created', base='master')
+
+        f = open('settings.json')
+        settings = json.load(f)
+
+        users = []
         for pr in pulls:
-            print(pr.user)
-        #print(repo.name)
-        #print(repo.name)
-        #pulls = repo.get_pulls(state='open', sort='created', base='master')
-        #for pr in pulls:
-        #    print(pr)
-        #git_url = 'https://api.github.com/users/Ryzhikh-Roman/repos'
-        #request = requests.get(git_url)
-        #print(request.content)
+            users.append(pr.user.name)
+
+        return settings["messages"][message_type] + '\n' + ','.join(users)
 
 
 
