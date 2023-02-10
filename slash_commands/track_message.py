@@ -8,4 +8,4 @@ from discord_bot import tree, DiscordBot, client
 @commands.has_permissions(administrator=True)
 async def self(interaction: discord.Interaction, message_id: str, roles: str):
     DiscordBot.track_message(client, message_id, roles)
-    print(roles.split(','))
+    await interaction.response.send_message(f"You track message {message_id} with roles: {roles}", delete_after=3.0)

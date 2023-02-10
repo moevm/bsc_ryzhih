@@ -4,16 +4,7 @@ class DiscordManager:
     async def send_message(message, user):
         if message.author == user:
             return
-
-        if message.content.lower() == 'hello':
-            await message.channel.send(f'Hello, {message.author.display_name}!')
-
-            return
-
-        if message.content.lower() == 'bye':
-            await message.channel.send(f'See you later, {message.author.display_name}!')
-
-            return
+        return
 
     async def add_role_by_reaction(client, payload, message_id, roles):
         channel = client.get_channel(payload.channel_id)
@@ -67,7 +58,6 @@ class DiscordManager:
             for member_role in payload.member.roles:
                 for _role in roles_list:
                     if member_role == _role:
-                        print(member_role)
                         await payload.member.remove_roles(member_role)
 
             if role:

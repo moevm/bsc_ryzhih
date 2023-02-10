@@ -21,10 +21,6 @@ async def get_pulls():
     repo = g.get_user().get_repo("HELVETE")
     pulls = repo.get_pulls(state='open', sort='created', base='master')
     return pulls
-    # users = []
-    # for pr in pulls:
-    #     users.append(pr.user)
-    # return users
 
 
 async def generate_message(message_type):
@@ -47,7 +43,7 @@ class DiscordBot(discord.Client):
 
     async def on_ready(self):
         if not self.synced:
-            await tree.sync()#(guild=discord.Object(id=1031609704188739614))
+            await tree.sync()
             self.synced = True
         print('We have successfully loggged in as {0.user}'.format(self))
 
@@ -58,10 +54,6 @@ class DiscordBot(discord.Client):
         if self.message_id is None:
             return
         await DiscordManager.add_role_by_reaction(client=client, payload=payload, message_id=self.message_id, roles=self.roles)
-
-    async def on_member_join(self, member):
-        guild = self.get_guild(self.guild)
-        await member.add_roles(discord.utils.get(guild.roles, name='2022'))
 
 
 client = DiscordBot()
