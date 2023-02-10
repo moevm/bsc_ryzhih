@@ -11,6 +11,7 @@ ENV TEST_TOKEN="${TEST_TOKEN}"
 
 RUN mkdir -p /usr/src/bot
 RUN pip install pygithub
+RUN pip install transliterate
 
 WORKDIR /usr/src/bot
 
