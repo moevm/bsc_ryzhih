@@ -4,5 +4,5 @@
 
 1. Перейти в дирректорию бота
 2. Прописать команду `docker build -t discord_bot .`
-3. Запустить контейнер при помощи команды `docker run —env TEST_TOKEN=<токен гита> -e TOKEN=<токен бота> discord_bot`
+3. Запустить контейнер при помощи команды `docker run -d —env TEST_TOKEN=<токен гита> -e TOKEN=<токен бота> discord_bot`
 
