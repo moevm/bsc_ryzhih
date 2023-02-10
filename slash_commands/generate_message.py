@@ -6,10 +6,21 @@ from discord.ext import commands
 from transliterate import translit
 from discord_bot import tree, DiscordBot, generate_message, get_pulls
 
+roles_list = ['Преподаватель', 'Модератор']
+
 
 @tree.command(name="generate_message", description="Generate message for students")#,guild=discord.Object(id=1031609704188739614))
-@commands.has_permissions(administrator=True)
 async def self(ctx: commands.Context, message_type: str, role: discord.Role, work: str = None):
+    check = False
+    for member_role in ctx.user.roles:
+        for _role in roles_list:
+            if member_role.name == _role:
+                check = True
+
+    if not check:
+        await ctx.response.send_message(f"You don't have permissions", delete_after=3.0)
+        return
+
     text = await generate_message(message_type)
     text_begin, text_end = text.split('$people')
     pulls = await get_pulls()
@@ -40,7 +51,6 @@ async def self(ctx: commands.Context, message_type: str, role: discord.Role, wor
             mentions += '\n' + user.mention + f" -- Курсовая работа"
         else:
             mentions += '\n' + user.mention + f" -- работа {work_type}"
-
     await ctx.channel.send(f"""
         {role.mention}
         {text_begin}

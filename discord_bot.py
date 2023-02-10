@@ -39,7 +39,6 @@ class DiscordBot(discord.Client):
     def track_message(self, message_id, roles):
         self.message_id = int(message_id)
         self.roles = roles.split(',')
-        print(roles)
 
     async def on_ready(self):
         if not self.synced:
