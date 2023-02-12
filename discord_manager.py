@@ -1,4 +1,5 @@
 import discord
+from discord.utils import get
 
 class DiscordManager:
     async def send_message(message, user):
@@ -10,7 +11,7 @@ class DiscordManager:
         channel = client.get_channel(payload.channel_id)
         message = await channel.fetch_message(payload.message_id)
         guild = client.get_guild(payload.guild_id)
-        reaction = discord.utils.get(message.reactions, emoji=payload.emoji.name)
+        reaction = get(message.reactions, emoji=payload.emoji.name)
 
         if payload.member.id == client.user.id:
             return
@@ -18,7 +19,6 @@ class DiscordManager:
         roles_list = []
         for i in roles:
             roles_list.append(discord.utils.get(guild.roles, name=i))
-
 
         if payload.message_id == message_id:
             match reaction.emoji:
@@ -62,5 +62,3 @@ class DiscordManager:
 
             if role:
                 await payload.member.add_roles(role)
-
-            await reaction.remove(payload.member)

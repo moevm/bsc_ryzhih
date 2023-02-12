@@ -10,15 +10,17 @@ TEST_TOKEN = os.environ.get('TEST_TOKEN')
 
 intents = discord.Intents.all()
 intents.message_content = True
+intents.members = True
+intents.presences = True
 
 
 def start():
     client.run(TOKEN)
 
 
-async def get_pulls():
+async def get_pulls(repo_name):
     g = Github(TEST_TOKEN)
-    repo = g.get_user().get_repo("HELVETE")
+    repo = g.get_user().get_repo(repo_name)
     pulls = repo.get_pulls(state='open', sort='created', base='master')
     return pulls
 
