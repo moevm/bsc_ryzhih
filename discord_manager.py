@@ -58,7 +58,13 @@ class DiscordManager:
             for member_role in payload.member.roles:
                 for _role in roles_list:
                     if member_role == _role:
-                        await payload.member.remove_roles(member_role)
+                        try:
+                            await payload.member.remove_roles(member_role)
+                        except:
+                            print('Error trying to remove roles: Member role is higher than bot role')
 
             if role:
-                await payload.member.add_roles(role)
+                try:
+                    await payload.member.add_roles(role)
+                except:
+                    print('Error trying to add role: Member role is higher than bot role')
