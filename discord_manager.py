@@ -1,25 +1,17 @@
 import discord
+from discord.utils import get
 
 class DiscordManager:
     async def send_message(message, user):
         if message.author == user:
             return
-
-        if message.content.lower() == 'hello':
-            await message.channel.send(f'Hello, {message.author.display_name}!')
-
-            return
-
-        if message.content.lower() == 'bye':
-            await message.channel.send(f'See you later, {message.author.display_name}!')
-
-            return
+        return
 
     async def add_role_by_reaction(client, payload, message_id, roles):
         channel = client.get_channel(payload.channel_id)
         message = await channel.fetch_message(payload.message_id)
         guild = client.get_guild(payload.guild_id)
-        reaction = discord.utils.get(message.reactions, emoji=payload.emoji.name)
+        reaction = get(message.reactions, emoji=payload.emoji.name)
 
         if payload.member.id == client.user.id:
             return
@@ -27,7 +19,6 @@ class DiscordManager:
         roles_list = []
         for i in roles:
             roles_list.append(discord.utils.get(guild.roles, name=i))
-
 
         if payload.message_id == message_id:
             match reaction.emoji:
@@ -67,10 +58,13 @@ class DiscordManager:
             for member_role in payload.member.roles:
                 for _role in roles_list:
                     if member_role == _role:
-                        print(member_role)
-                        await payload.member.remove_roles(member_role)
+                        try:
+                            await payload.member.remove_roles(member_role)
+                        except:
+                            print('Error trying to remove roles: Member role is higher than bot role')
 
             if role:
-                await payload.member.add_roles(role)
-
-            await reaction.remove(payload.member)
+                try:
+                    await payload.member.add_roles(role)
+                except:
+                    print('Error trying to add role: Member role is higher than bot role')

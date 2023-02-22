@@ -1,11 +1,14 @@
 import os
 import json
 import discord
-from github import Github
+from event_manager import Events
+#from github import Github
+import github
 from discord import app_commands
 from discord_manager import DiscordManager
 
-TOKEN = os.environ.get('TOKEN')
+TOKEN = os.environ.get('ALESHA_TOKEN')
+GIT_TOKEN = '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'
 TEST_TOKEN = os.environ.get('TEST_TOKEN')
 
 intents = discord.Intents.all()
@@ -16,15 +19,12 @@ def start():
     client.run(TOKEN)
 
 
-async def get_pulls():
-    g = Github(TEST_TOKEN)
-    repo = g.get_user().get_repo("HELVETE")
-    pulls = repo.get_pulls(state='open', sort='created', base='master')
+async def get_pulls(repo_name):
+    g = github.Github(GIT_TOKEN)
+    github
+    repo = g.get_repo(repo_name)
+    pulls = repo.get_pulls(state='open', sort='created')
     return pulls
-    # users = []
-    # for pr in pulls:
-    #     users.append(pr.user)
-    # return users
 
 
 async def generate_message(message_type):
@@ -36,6 +36,7 @@ async def generate_message(message_type):
 class DiscordBot(discord.Client):
     def __init__(self):
         super().__init__(intents=intents)
+        self.events = Events
         self.synced = False
         self.message_id = None
         self.roles = None
@@ -47,7 +48,7 @@ class DiscordBot(discord.Client):
 
     async def on_ready(self):
         if not self.synced:
-            await tree.sync()#(guild=discord.Object(id=1031609704188739614))
+            await tree.sync()
             self.synced = True
         print('We have successfully loggged in as {0.user}'.format(self))
 
