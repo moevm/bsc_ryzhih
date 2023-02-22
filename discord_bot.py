@@ -2,26 +2,23 @@ import os
 import json
 import discord
 from event_manager import Events
-#from github import Github
 import github
 from discord import app_commands
 from discord_manager import DiscordManager
 
-TOKEN = os.environ.get('ALESHA_TOKEN')
-GIT_TOKEN = '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'
-TEST_TOKEN = os.environ.get('TEST_TOKEN')
+DISCORD_BOT_TOKEN = os.environ.get('DISCORD_BOT_TOKEN')
+GIT_TOKEN = os.environ.get('GIT_TOKEN')
 
 intents = discord.Intents.all()
 intents.message_content = True
 
 
 def start():
-    client.run(TOKEN)
+    client.run(DISCORD_BOT_TOKEN)
 
 
 async def get_pulls(repo_name):
     g = github.Github(GIT_TOKEN)
-    github
     repo = g.get_repo(repo_name)
     pulls = repo.get_pulls(state='open', sort='created')
     return pulls
