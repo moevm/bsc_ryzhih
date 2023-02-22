@@ -2,11 +2,9 @@
 
 FROM gorialis/discord.py
 
-ARG TOKEN=token
-ENV TOKEN="${TOKEN}"
+ENV DISCORD_BOT_TOKEN=discord_bot_token
 
-ARG TEST_TOKEN=test_token
-ENV TEST_TOKEN="${TEST_TOKEN}"
+ENV GIT_TOKEN=git_token
 
 
 RUN mkdir -p /usr/src/bot
