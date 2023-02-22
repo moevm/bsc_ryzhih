@@ -7,7 +7,9 @@ from discord import app_commands
 from discord_manager import DiscordManager
 
 DISCORD_BOT_TOKEN = os.environ.get('DISCORD_BOT_TOKEN')
+print(DISCORD_BOT_TOKEN)
 GIT_TOKEN = os.environ.get('GIT_TOKEN')
+print(GIT_TOKEN)
 
 intents = discord.Intents.all()
 intents.message_content = True
