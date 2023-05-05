@@ -3,11 +3,11 @@
 import os
 import typing
 import smtplib
-import discord
+import nextcord
 import mimetypes
 from email import encoders
-from discord_bot import tree
-from discord.ext import commands
+from nextcord import Interaction
+from nextcord.ext import commands, ipc
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -72,19 +72,28 @@ def attach_file(msg, filepath):
     file.add_header('Content-Disposition', 'attachment', filename=filename)
     msg.attach(file)
 
+class ChatHistory(commands.Cog):
+    def __init__(self, client):
+        self.my_bot = client
 
-@tree.command(name="chat_history", description="Sends chat history to specified email")
-              #guild=discord.Object(id=1031609704188739614))
-@commands.has_permissions(administrator=True)
-async def self(ctx: commands.Context, email: str, limit: int = 200):
-    with open(ctx.channel.name + ".txt", "w+", encoding="utf-8") as file:
-        messages = [message async for message in ctx.channel.history(limit=limit)]
-        for message in reversed(messages):
-            file.write(
-                f"{message.created_at.strftime('%Y-%m-%d %H:%M:%S')} {message.author.display_name}: {message.content}\n")
+    testServerId = 1001473537451761664
 
-    path = os.path.abspath(file.name)
-    files = [path]
-    send_email(email, "История чата", f"История чата {ctx.channel.name}:", files)
+    @nextcord.slash_command(name="chat_history", description="Sends chat history to specified email",
+                            guild_ids=[testServerId])
+    @commands.has_permissions(administrator=True)
+    async def self(self, interaction: Interaction, email: str, limit: int = 200):
+        with open(interaction.channel.name + ".txt", "w+", encoding="utf-8") as file:
+            messages = [message async for message in interaction.channel.history(limit=limit)]
+            for message in reversed(messages):
+                file.write(
+                    f"{message.created_at.strftime('%Y-%m-%d %H:%M:%S')} {message.author.display_name}: {message.content}\n")
 
-    await ctx.response.send_message(f"{ctx.user}, u write {email} and {ctx.channel}", ephemeral=True, delete_after=3.0)
+            path = os.path.abspath(file.name)
+            files = [path]
+            send_email(email, "История чата", f"История чата {interaction.channel.name}:", files)
+
+            await interaction.response.send_message(f"{interaction.user}, u write {email} and {interaction.channel}",
+                                                    ephemeral=True, delete_after=3.0)
+
+def setup(client):
+    client.add_cog(ChatHistory(client))
