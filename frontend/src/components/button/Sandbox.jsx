@@ -14,7 +14,7 @@ const Sandbox = () => (
         'headers':{
           'Content-Type':'application/json'
         },
-        'body':JSON.stringify({'Hello':['1','2']})
+        'body':JSON.stringify({'channel_id': '1050570429959507978', 'guild_id': '1001473537451761664', 'message': 'Hello!'})
       })
       .then(res => res.json())
       .then((data) => {
@@ -26,6 +26,19 @@ const Sandbox = () => (
     }}>Post</Button>
 
     <h2><span>2. Get request:</span></h2>
+    <Button onClick={() => { 
+      console.log('!!!!');
+      fetch("http://localhost:5000/members")
+      .then(res => res.json())
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      }}>Get</Button>
+
+    <h2><span>3. Get request:</span></h2>
     <Button onClick={() => { 
       console.log('!!!!');
       fetch("http://localhost:5000/members")

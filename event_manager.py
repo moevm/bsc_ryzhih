@@ -1,6 +1,6 @@
 from datetime import date, datetime, timedelta
-from ics import Calendar, Event
-from ics.grammar.parse import ContentLine
+#from ics import Calendar, Event
+#from ics.grammar.parse import ContentLine
 from event import Event as Discord_event
 
 

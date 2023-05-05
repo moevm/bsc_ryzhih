@@ -3,7 +3,7 @@ import re
 import discord
 from discord.utils import get
 from discord.ext import commands
-from transliterate import translit
+#from transliterate import translit
 from discord_bot import tree, DiscordBot, generate_message, get_pulls
 
 roles_list = ['Преподаватель', 'Модератор']
@@ -48,7 +48,7 @@ async def self(ctx: commands.Context, message_type: str, repo_name: str, work: s
 
         full_nick = surname + '.' + name + '.' + group[0]
         nick = full_nick.replace('ya', 'ja')
-        nick = translit(nick, 'ru')
+        #nick = translit(nick, 'ru')
         user = get(ctx.guild.members, nick=nick)
 
         if work:
