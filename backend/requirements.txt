@@ -1,0 +1,4 @@
+quart==0.18.4
+quart-cors==0.6.0
+nextcord==2.4.2
+nextcord-ext-ipc==2.2.1
