@@ -6,6 +6,16 @@ from nextcord.ext import commands, ipc
 from nextcord.utils import get
 from discord_bot import generate_message, get_pulls
 
+#async def generate_message(message_type):
+#    with open('settings.json', 'r', encoding='utf_8_sig') as f:
+#        settings = json.load(f)
+#    return settings["messages"][message_type]
+
+#async def get_pulls(repo_name):
+#    repo = git.get_repo(repo_name)
+#    pulls = repo.get_pulls(state='open', sort='created')
+#    return pulls
+
 roles_list = ['Преподаватель', 'Модератор']
 
 class GenerateMessage(commands.Cog):

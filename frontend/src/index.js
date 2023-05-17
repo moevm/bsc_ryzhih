@@ -7,6 +7,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 import Home from './layout/home/home';
 import ButtonSandbox from './components/button/Sandbox';
+import Registration from './layout/registration/registration';
 
 ReactDOM.render((
   <BrowserRouter>
@@ -14,6 +15,7 @@ ReactDOM.render((
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/button" component={ButtonSandbox} />
+        <Route path="/registration" component={Registration} />
       </Switch>
     </App>
   </BrowserRouter>

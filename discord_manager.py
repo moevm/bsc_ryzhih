@@ -2,10 +2,10 @@ import nextcord
 from nextcord.utils import get
 
 class DiscordManager:
-    async def send_message(message, user):
-        if message.author == user:
-            return
-        return
+    #async def send_message(message, user):
+    #    if message.author == user:
+    #        return
+    #    return
 
     async def add_role_by_reaction(client, payload, message_id, roles):
         channel = client.get_channel(payload.channel_id)

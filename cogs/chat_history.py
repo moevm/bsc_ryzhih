@@ -72,6 +72,7 @@ def attach_file(msg, filepath):
     file.add_header('Content-Disposition', 'attachment', filename=filename)
     msg.attach(file)
 
+
 class ChatHistory(commands.Cog):
     def __init__(self, client):
         self.my_bot = client
@@ -81,15 +82,14 @@ class ChatHistory(commands.Cog):
     @nextcord.slash_command(name="chat_history", description="Sends chat history to specified email",
                             guild_ids=[testServerId])
     @commands.has_permissions(administrator=True)
-    async def self(self, interaction: Interaction, email: str, limit: int = 200):
+    async def self(self, interaction: Interaction, email: str, limit: int = None):
         with open(interaction.channel.name + ".txt", "w+", encoding="utf-8") as file:
-            messages = [message async for message in interaction.channel.history(limit=limit)]
-            for message in reversed(messages):
-                file.write(
-                    f"{message.created_at.strftime('%Y-%m-%d %H:%M:%S')} {message.author.display_name}: {message.content}\n")
-
+            messages = [message async for message in interaction.channel.history(limit=limit, oldest_first=True)]
+            for message in messages:
+                file.write(f"{message.created_at.strftime('%Y-%m-%d %H:%M:%S')} {message.author.display_name}: {message.content}\n")
             path = os.path.abspath(file.name)
             files = [path]
+            file.close() # Обязательно, т.к. без этого файл отправляется пустым
             send_email(email, "История чата", f"История чата {interaction.channel.name}:", files)
 
             await interaction.response.send_message(f"{interaction.user}, u write {email} and {interaction.channel}",

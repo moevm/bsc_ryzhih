@@ -7,12 +7,12 @@ from event import Event as Discord_event
 class Events:
     events = []
 
-    def add_event(self, title, repeat, time, description, roles):
+    def add_event(self, title, repeat, time, data, description, roles):
         if len(self.events) == 0:
             index = 0
         else:
             index = self.events[-1].index + 1
-        one_event = Discord_event(index, title, repeat, time, description, roles)
+        one_event = Discord_event(index, title, repeat, time, data, description, roles)
         self.events.append(one_event)
 
     def delete_event(self, index, title, repeat, time, description, roles):

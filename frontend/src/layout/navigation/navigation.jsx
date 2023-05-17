@@ -10,7 +10,8 @@ const Navigation = () => (
     <nav>
       <ul className="nav">
         <li><NavLink exact to="/">Home</NavLink></li>
-        <li><NavLink to="/button">Button</NavLink></li>
+        <li><NavLink to="/button">Commands</NavLink></li>
+        <li><NavLink to="/registration">Authentication</NavLink></li>
       </ul>
     </nav>
   </div>

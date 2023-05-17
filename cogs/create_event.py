@@ -18,8 +18,9 @@ class CreateEvent(commands.Cog):
 
     @nextcord.slash_command(name="create_event", description="create event", guild_ids=[testServerId])
     @commands.has_permissions(administrator=True)
-    async def self(self, interaction: Interaction, title: str, repeat: typing.Literal['week','day'], time: typing.Literal['8', '9'], description: str, roles: str):
-        self.client.events.add_event(self.client.events, title, repeat, time, description, roles)
+    async def self(self, interaction: Interaction, title: str, repeat: typing.Literal['no', 'day', 'week', '2 weeks'],
+                   time: str, data: str, description: str, roles: str):
+        self.client.events.add_event(self.client.events, title, repeat, time, data, description, roles)
         await interaction.response.send_message(f"U created event", ephemeral=True, delete_after=3.0)
 
 def setup(client):
