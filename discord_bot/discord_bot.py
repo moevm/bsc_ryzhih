@@ -17,7 +17,7 @@ git = github.Github(GIT_TOKEN)
 def start():
     for extension in initial_extensions:
         client.load_extension(extension)
-    client.ipc.start()
+    #client.ipc.start()
     client.run(DISCORD_BOT_TOKEN)
 
 #переместить
@@ -40,7 +40,7 @@ class DiscordBot(commands.Bot):
         #self.synced = False
         self.message_id = None
         self.roles = None
-        self.ipc = ipc.Server(self, secret_key="secret")
+        #self.ipc = ipc.Server(self, secret_key="secret")
 
     def track_message(self, message_id, roles):
         self.message_id = int(message_id)
@@ -74,6 +74,7 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         initial_extensions.append('cogs.' + filename[:-3])
 
+'''
 @client.ipc.route()
 async def generate_message(data):
     guild = client.get_guild(
@@ -112,4 +113,4 @@ async def get_guild(data):
         "prefix" : "?"
     }
     return guild_data
-
+'''
