@@ -5,7 +5,7 @@ from nextcord.ext import ipc
 
 app = Quart(__name__)
 app = cors(app, allow_origin="*")
-ipc_client = ipc.Client(secret_key="secret1234", port=8760)  # secret_key must be the same as your server
+ipc_client = ipc.Client(secret_key="secret1234", host="bot", port=8760)  # secret_key must be the same as your server
 
 
 @app.route('/')

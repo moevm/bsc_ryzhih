@@ -8,11 +8,7 @@ from nextcord.ext import commands, ipc
 from discord_manager import DiscordManager
 
 DISCORD_BOT_TOKEN = os.environ.get('DISCORD_BOT_TOKEN')
-
-print(DISCORD_BOT_TOKEN)
 GIT_TOKEN = os.environ.get('GIT_TOKEN')
-
-print(GIT_TOKEN)
 git = github.Github(GIT_TOKEN)
 
 
@@ -39,9 +35,11 @@ class DiscordBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.events = Events
+        #self.synced = False
         self.message_id = None
         self.roles = None
-        self.ipc = ipc.Server(self, secret_key="secret1234", host="127.0.0.1", port=8760, do_multicast=True)
+        #self.ipc = ipc.Server(self, secret_key="secret")
+        self.ipc = ipc.Server(self, secret_key="secret1234", host="bot", port=8760, do_multicast=True)
 
     def track_message(self, message_id, roles):
         self.message_id = int(message_id)
