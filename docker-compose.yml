@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - "./backend:/usr/src/app"
+    depends_on:
+      - bot
+    ports:
+      - 5000:5000
+    networks:
+      - web
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - "./frontend:/usr/src/app"
+    networks:
+      - web
+    ports:
+      - 127.0.0.1:3000:3000
+
+  bot:
+    build:
+      context: ./discord_bot
+      dockerfile: Dockerfile
+    volumes:
+      - "./discord_bot:/usr/src/app"
+    env_file:
+      - docker.env
+    networks:
+      - web
+    ports:
+      - 8760:8760
+
+networks:
+  web:
