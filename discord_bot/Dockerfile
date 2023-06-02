@@ -3,6 +3,7 @@ FROM python:3.10
 WORKDIR /usr/src/app
 
 RUN apt-get update
+RUN apt-get install inetutils-ping
 
 COPY ./requirements.txt .
 RUN pip install --upgrade pip

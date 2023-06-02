@@ -7,8 +7,12 @@ services:
       dockerfile: Dockerfile
     volumes:
       - "./backend:/usr/src/app"
+    depends_on:
+      - bot
     ports:
       - 5000:5000
+    networks:
+      - web
 
   frontend:
     build:
@@ -16,8 +20,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - "./frontend:/usr/src/app"
-    depends_on:
-      - backend
+    networks:
+      - web
 
   bot:
     build:
@@ -27,3 +31,10 @@ services:
       - "./discord_bot:/usr/src/app"
     env_file:
       - docker.env
+    networks:
+      - web
+    ports:
+      - 8760:8760
+
+networks:
+  web:
