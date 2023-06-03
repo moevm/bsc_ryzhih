@@ -1,16 +1,13 @@
 import os
-import json
 import discord
-from event_manager import Events
-import github
 import nextcord
+from event_manager import Events
 from nextcord.ext import commands, ipc
 from discord_manager import DiscordManager
+from cogs.chat_history import send_email
+from cogs.generate_message import message_text
 
 DISCORD_BOT_TOKEN = os.environ.get('DISCORD_BOT_TOKEN')
-GIT_TOKEN = os.environ.get('GIT_TOKEN')
-git = github.Github(GIT_TOKEN)
-
 
 def start():
     for extension in initial_extensions:
@@ -18,33 +15,18 @@ def start():
     client.ipc.start()
     client.run(DISCORD_BOT_TOKEN)
 
-#переместить
-async def get_pulls(repo_name):
-    repo = git.get_repo(repo_name)
-    pulls = repo.get_pulls(state='open', sort='created')
-    return pulls
-
-#переместить
-async def generate_message(message_type):
-    with open('settings.json', 'r', encoding='utf_8_sig') as f:
-        settings = json.load(f)
-    return settings["messages"][message_type]
-
 
 class DiscordBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.events = Events
-        #self.synced = False
         self.message_id = None
         self.roles = None
-        #self.ipc = ipc.Server(self, secret_key="secret")
         self.ipc = ipc.Server(self, secret_key="secret1234", host="bot", port=8760, do_multicast=True)
 
     def track_message(self, message_id, roles):
         self.message_id = int(message_id)
         self.roles = roles.split(',')
-        #print(roles)
 
 
     async def on_ready(self):
@@ -53,9 +35,6 @@ class DiscordBot(commands.Bot):
     async def on_ipc_ready(self):
         """Called upon the IPC Server being ready"""
         print("Ipc is ready.")
-
-    #async def on_message(self, message):
-    #    await DiscordManager.send_message(message=message, user=client.user)
 
     async def on_raw_reaction_add(self, payload):
         if self.message_id is None:
@@ -76,19 +55,42 @@ for filename in os.listdir('./cogs'):
 
 @client.ipc.route()
 async def generate_message(data):
-    guild = client.get_guild(
-        data.guild_id
-    )  # get the guild object using parsed guild_id
+    channel_name = data.channel_name
+    message_type = data.message_type
+    repo_name = data.repo_name
+    work = data.work
 
-    return guild.member_count  # return the member count to the client
+    testServerId = 1001473537451761664
+    guild = client.get_guild(testServerId)
+    for channel in guild.channels:
+        if channel.name == channel_name:
+            break
+
+    response = await message_text(client, channel_name, message_type,
+                                                               repo_name, work)
+
+    return {response}  # return the member count to the client
 
 @client.ipc.route()
 async def chat_history(data):
-    guild = client.get_guild(
-        data.guild_id
-    )  # get the guild object using parsed guild_id
+    channel_name = data.channel_name
+    email = data.email
+    testServerId = 1001473537451761664
+    guild = client.get_guild(testServerId)
+    for channel in guild.channels:
+        if channel.name == channel_name:
+            break
+    with open(channel.name + ".txt", "w+", encoding="utf-8") as file:
+        messages = [message async for message in channel.history(oldest_first=True)]
+        for message in messages:
+            file.write(
+                f"{message.created_at.strftime('%Y-%m-%d %H:%M:%S')} {message.author.display_name}: {message.content}\n")
+        path = os.path.abspath(file.name)
+        files = [path]
+        file.close()  # Обязательно, т.к. без этого файл отправляется пустым
+        send_email(email, "История чата", f"История чата {channel.name}:", files)
 
-    return guild.member_count  # return the member count to the client
+    return {'ok'}  # return the member count to the client
 
 @client.ipc.route()
 async def get_member_count(data):
@@ -97,19 +99,3 @@ async def get_member_count(data):
     )  # get the guild object using parsed guild_id
 
     return guild.member_count  # return the member count to the client
-
-@client.ipc.route()
-async def get_guild_count(data):
-    return len(client.guilds)   # returns the len of the guilds to the client
-
-@client.ipc.route()
-async def get_guild(data):
-    guild = client.get_guild(data.guild_id)
-    if guild is None: return "None"
-    guild_data = {
-        "name": guild.name,
-        "id": guild.id,
-        "prefix" : "?"
-    }
-    return guild_data
-

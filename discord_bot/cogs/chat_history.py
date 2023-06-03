@@ -1,7 +1,6 @@
 # История переписки на почту
 
 import os
-import typing
 import smtplib
 import nextcord
 import mimetypes
