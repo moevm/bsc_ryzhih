@@ -5,18 +5,14 @@ from nextcord.ext import commands, ipc
 import enum
 import typing
 
-#class Time(enum.Enum):
-#    apple = 1
-#    banana = 2
-#    cherry = 3
-
 class CreateEvent(commands.Cog):
+    server_id = None
+
     def __init__(self, client):
         self.client = client
+        self.server_id = client.server_id
 
-    testServerId = 1001473537451761664
-
-    @nextcord.slash_command(name="create_event", description="create event", guild_ids=[testServerId])
+    @nextcord.slash_command(name="create_event", description="create event", guild_ids=[server_id])
     @commands.has_permissions(administrator=True)
     async def self(self, interaction: Interaction, title: str, repeat: typing.Literal['no', 'day', 'week', '2 weeks'],
                    time: str, data: str, description: str, roles: str):

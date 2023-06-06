@@ -8,6 +8,8 @@ from cogs.chat_history import send_email
 from cogs.generate_message import message_text
 
 DISCORD_BOT_TOKEN = os.environ.get('DISCORD_BOT_TOKEN')
+SERVER_ID = int(os.environ.get('SERVER_ID'))
+
 
 def start():
     for extension in initial_extensions:
@@ -22,12 +24,12 @@ class DiscordBot(commands.Bot):
         self.events = Events
         self.message_id = None
         self.roles = None
+        self.server_id = SERVER_ID
         self.ipc = ipc.Server(self, secret_key="secret1234", host="bot", port=8760, do_multicast=True)
 
     def track_message(self, message_id, roles):
         self.message_id = int(message_id)
         self.roles = roles.split(',')
-
 
     async def on_ready(self):
         print('We have successfully loggged in as {0.user}'.format(self))
@@ -39,7 +41,8 @@ class DiscordBot(commands.Bot):
     async def on_raw_reaction_add(self, payload):
         if self.message_id is None:
             return
-        await DiscordManager.add_role_by_reaction(client=client, payload=payload, message_id=self.message_id, roles=self.roles)
+        await DiscordManager.add_role_by_reaction(client=client, payload=payload, message_id=self.message_id,
+                                                  roles=self.roles)
 
     async def on_member_join(self, member):
         guild = self.get_guild(self.guild)
@@ -60,23 +63,24 @@ async def generate_message(data):
     repo_name = data.repo_name
     work = data.work
 
-    testServerId = 1001473537451761664
-    guild = client.get_guild(testServerId)
+    # testServerId = 1001473537451761664
+    guild = client.get_guild(SERVER_ID)
     for channel in guild.channels:
         if channel.name == channel_name:
             break
 
     response = await message_text(client, channel_name, message_type,
-                                                               repo_name, work)
+                                  repo_name, work)
 
     return {response}  # return the member count to the client
+
 
 @client.ipc.route()
 async def chat_history(data):
     channel_name = data.channel_name
     email = data.email
-    testServerId = 1001473537451761664
-    guild = client.get_guild(testServerId)
+    #testServerId = 1001473537451761664
+    guild = client.get_guild(SERVER_ID)
     for channel in guild.channels:
         if channel.name == channel_name:
             break
@@ -91,6 +95,7 @@ async def chat_history(data):
         send_email(email, "История чата", f"История чата {channel.name}:", files)
 
     return {'ok'}  # return the member count to the client
+
 
 @client.ipc.route()
 async def get_member_count(data):

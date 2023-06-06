@@ -73,13 +73,14 @@ def attach_file(msg, filepath):
 
 
 class ChatHistory(commands.Cog):
+    server_id = None
+
     def __init__(self, client):
         self.my_bot = client
-
-    testServerId = 1001473537451761664
+        self.server_id = client.server_id
 
     @nextcord.slash_command(name="chat_history", description="Sends chat history to specified email",
-                            guild_ids=[testServerId])
+                            guild_ids=[server_id])
     @commands.has_permissions(administrator=True)
     async def self(self, interaction: Interaction, email: str, limit: int = None):
         with open(interaction.channel.name + ".txt", "w+", encoding="utf-8") as file:

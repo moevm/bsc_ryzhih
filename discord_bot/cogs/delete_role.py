@@ -5,12 +5,13 @@ from nextcord.ext import commands, ipc
 from nextcord.utils import get
 
 class DeleteRole(commands.Cog):
+    server_id = None
+
     def __init__(self, client):
         self.client = client
+        self.server_id = client.server_id
 
-    testServerId = 1001473537451761664
-
-    @nextcord.slash_command(name="delete_role", description="Delete chosen role from all members", guild_ids=[testServerId])
+    @nextcord.slash_command(name="delete_role", description="Delete chosen role from all members", guild_ids=[server_id])
     @commands.has_permissions(administrator=True)
     async def self(self, interaction: Interaction, role: str):
         for member in interaction.guild.members:

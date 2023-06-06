@@ -101,13 +101,14 @@ roles_list = ['Преподаватель', 'Модератор']
 
 
 class GenerateMessage(commands.Cog):
+    server_id = None
+
     def __init__(self, client):
         self.client = client
-
-    testServerId = 1001473537451761664
+        self.server_id = client.server_id
 
     @nextcord.slash_command(name="generate_message", description="Generate message for students",
-                            guild_ids=[testServerId])
+                            guild_ids=[server_id])
     @commands.has_permissions(administrator=True)
     async def self(self, interaction: Interaction, message_type: str, repo_name: str, work: str = None):
         check = False

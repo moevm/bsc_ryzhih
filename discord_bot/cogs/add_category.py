@@ -3,13 +3,17 @@ import nextcord
 from nextcord import Interaction
 from nextcord.ext import commands, ipc
 
+
 class AddCategory(commands.Cog):
+    server_id = None
+
     def __init__(self, client):
         self.client = client
+        self.server_id = client.server_id
 
-    testServerId = 1001473537451761664
     groups = ['2300', '2303', '2304', '2381', '2382', '2383', '2384']
-    @nextcord.slash_command(name="add_category", description="Add category to the guild", guild_ids=[testServerId])
+
+    @nextcord.slash_command(name="add_category", description="Add category to the guild", guild_ids=[server_id])
     @commands.has_permissions(administrator=True)
     async def self(self, interaction: Interaction, name: str, prefix: str):
         category = await interaction.guild.create_category(name=name)

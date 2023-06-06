@@ -6,12 +6,13 @@ from discord_bot import DiscordBot#, client
 roles_list = ['Преподаватель', 'Модератор']
 
 class TrackMessage(commands.Cog):
+    server_id = None
+
     def __init__(self, client):
         self.client = client
+        self.server_id = client.server_id
 
-    testServerId = 1001473537451761664
-
-    @nextcord.slash_command(name="track_message", description="track_message")
+    @nextcord.slash_command(name="track_message", description="track_message", guild_ids=[server_id])
     @commands.has_permissions(administrator=True)
     async def self(self, interaction: Interaction, message_id: str, roles: str):
         check = False
